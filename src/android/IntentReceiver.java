@@ -20,6 +20,8 @@ import org.apache.cordova.PluginResult;
 
 public class IntentReceiver extends CordovaPlugin {
 
+    private CallbackContext onNewIntentCallbackContext = null;
+
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
         try {
@@ -50,7 +52,19 @@ public class IntentReceiver extends CordovaPlugin {
                     callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
                     return false;
                 }
-            }
+            } else if (action.equals("onNewIntent")) {
+                 this.onNewIntentCallbackContext = callbackContext;
+
+                 if (args.length() != 0) {
+                     callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.INVALID_ACTION));
+                     return false;
+                 }
+
+                 PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT);
+                 result.setKeepCallback(true);
+                 callbackContext.sendPluginResult(result);
+                 return true;
+             }
             callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.INVALID_ACTION));
             return false;
         } catch (JSONException e) {
@@ -58,6 +72,15 @@ public class IntentReceiver extends CordovaPlugin {
             String errorMessage=e.getMessage();
             callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION, errorMessage));
             return false;
+        }
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        if (this.onNewIntentCallbackContext != null) {
+            PluginResult result = new PluginResult(PluginResult.Status.OK, intent.getDataString());
+            result.setKeepCallback(true);
+            this.onNewIntentCallbackContext.sendPluginResult(result);
         }
     }
 }
