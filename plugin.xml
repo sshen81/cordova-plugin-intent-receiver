@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://cordova.apache.org/ns/plugins/1.0"
+           id="cordova-plugin-intent-receiver"
+      version="1.0.0">
+    <name>IntentReceiver</name>
+    <description>IntentReceiver for Cordova</description>
+    <license>MIT</license>
+    <keywords>cordova,intents,intentreceiver</keywords>
+
+    <js-module src="www/intentreceiver.js" name="IntentReceiver">
+        <clobbers target="IntentReceiver" />
+    </js-module>
+
+    <!-- android -->
+    <platform name="android">
+        <source-file src="src/android/IntentReceiver.java" target-dir="src/com/whot/is/IntentReceiver" />
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="IntentReceiver" >
+                <param name="android-package" value="com.whot.is.IntentReceiver.IntentReceiver"/>
+            </feature>
+        </config-file>
+	<config-file target="AndroidManifest.xml" parent="/*/application/activity">
+		<intent-filter>
+            <action android:name="android.intent.action.SEND" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <data android:mimeType="text/plain" />
+		</intent-filter>
+    </config-file>
+    </platform>
+</plugin>

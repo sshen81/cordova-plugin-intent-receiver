@@ -1,0 +1,23 @@
+{
+  "name": "cordova-plugin-intent-receiver",
+  "version": "1.0.0",
+  "description": "IntentReceiver",
+  "cordova": {
+    "id": "cordova-plugin-intent-receiver",
+    "platforms": [
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sshen81/cordova-plugin-intent-receiver.git"
+  },
+  "keywords": [
+    "cordova",
+    "intents",
+    "intentreceiver",
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "license": "MIT"
+}
