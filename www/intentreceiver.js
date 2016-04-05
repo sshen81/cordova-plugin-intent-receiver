@@ -26,11 +26,11 @@
     }, 'IntentReceiver', 'getExtra', [params]);
   };
 
-  IntentReceiver.prototype.onNewIntent = function (callback) {
+  IntentReceiver.prototype.onNewIntent = function (params, callback) {
     return cordova.exec(function (args) {
       callback(args);
     }, function (args) {
-    }, 'IntentReceiver', 'onNewIntent', []);
+    }, 'IntentReceiver', 'onNewIntent', [params]);
   };
 
   window.IntentReceiver = new IntentReceiver();

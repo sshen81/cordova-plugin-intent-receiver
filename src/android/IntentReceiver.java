@@ -21,6 +21,7 @@ import org.apache.cordova.PluginResult;
 public class IntentReceiver extends CordovaPlugin {
 
     private CallbackContext onNewIntentCallbackContext = null;
+    private String onNewIntentExtra = null;
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
@@ -53,12 +54,13 @@ public class IntentReceiver extends CordovaPlugin {
                     return false;
                 }
             } else if (action.equals("onNewIntent")) {
-                 this.onNewIntentCallbackContext = callbackContext;
-
-                 if (args.length() != 0) {
+                 if (args.length() != 1) {
                      callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.INVALID_ACTION));
                      return false;
                  }
+
+                 this.onNewIntentCallbackContext = callbackContext;
+                 this.onNewIntentExtra = args.getString(0);
 
                  PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT);
                  result.setKeepCallback(true);
@@ -77,8 +79,16 @@ public class IntentReceiver extends CordovaPlugin {
 
     @Override
     public void onNewIntent(Intent intent) {
-        if (this.onNewIntentCallbackContext != null) {
-            PluginResult result = new PluginResult(PluginResult.Status.OK, intent.getDataString());
+        if (this.onNewIntentCallbackContext != null && this.onNewIntentExtra != null) {
+            String r = null;
+            if (intent.hasExtra(this.onNewIntentExtra)) {
+                r = intent.getStringExtra(this.onNewIntentExtra);
+                if (null == r) {
+                    r = ((Uri) intent.getParcelableExtra(this.onNewIntentExtra)).toString();
+                }
+            }
+
+            PluginResult result = new PluginResult(PluginResult.Status.OK, r);
             result.setKeepCallback(true);
             this.onNewIntentCallbackContext.sendPluginResult(result);
         }
